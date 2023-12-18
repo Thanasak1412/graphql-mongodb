@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
+import { CreateLessonInput } from './lesson.input';
 import { LessonService } from './lesson.service';
 import { Lesson } from './model/lesson.model';
 
@@ -8,22 +9,20 @@ import { Lesson } from './model/lesson.model';
 export class LessonResolver {
   constructor(private readonly lessonService: LessonService) {}
 
+  @Query((returns) => [Lesson])
+  lessons(): Promise<Lesson[]> {
+    return this.lessonService.getLessons();
+  }
+
   @Query((returns) => Lesson)
-  lesson() {
-    return {
-      id: 'fajskdfjk123',
-      name: 'lesson',
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-    };
+  lesson(@Args('id') id: string): Promise<Lesson> {
+    return this.lessonService.getLesson(id);
   }
 
   @Mutation((returns) => Lesson)
   createLesson(
-    @Args('name') name: string,
-    @Args('startDate') startDate: string,
-    @Args('endDate') endDate: string,
+    @Args('createLessonInput') createLessonInput: CreateLessonInput,
   ) {
-    return this.lessonService.createLesson(name, startDate, endDate);
+    return this.lessonService.createLesson(createLessonInput);
   }
 }
