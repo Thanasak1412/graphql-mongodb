@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { LessonModule } from './lesson/lesson.module';
 import { Lesson } from './lesson/model/lesson.entity';
+import { Student } from './student/model/student.entity';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -15,7 +17,7 @@ import { Lesson } from './lesson/model/lesson.entity';
       autoLoadEntities: true,
       useUnifiedTopology: true,
       synchronize: true,
-      entities: [Lesson],
+      entities: [Lesson, Student],
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -23,6 +25,7 @@ import { Lesson } from './lesson/model/lesson.entity';
       sortSchema: true,
     }),
     LessonModule,
+    StudentModule,
   ],
 })
 export class AppModule {}

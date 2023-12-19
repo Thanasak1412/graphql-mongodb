@@ -1,6 +1,6 @@
-import { IsDateString, IsString, MinLength } from 'class-validator';
+import { IsDateString, IsString, IsUUID, MinLength } from 'class-validator';
 
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, ID, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class CreateLessonInput {
@@ -16,4 +16,22 @@ export class CreateLessonInput {
   @Field()
   @IsDateString()
   endDate: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @Field((type) => [String], { defaultValue: [] })
+  @IsString({ each: true })
+  students: string[];
+}
+
+@InputType()
+export class AssignStudentsToLessonInput {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @Field((type) => ID)
+  @IsUUID()
+  lessonId: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @Field((type) => [ID])
+  @IsUUID('4', { each: true })
+  studentIds: string[];
 }
